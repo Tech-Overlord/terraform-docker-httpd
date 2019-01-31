@@ -4,7 +4,7 @@ pipeline {
      stage('Terraform Plan') {
        steps {
           sh 'sudo terraform init'
-          sh 'sudo terraform plan -var "env=prod" -out=plan'
+          sh 'sudo terraform plan -out=plan'
        }
      }
      stage('Terraform Apply') {
