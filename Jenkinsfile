@@ -20,6 +20,8 @@ pipeline {
             echo "Option selected is Image download"
           } else if ("${params.TERRAFORM_RESOURCE == 'docker_container.httpd-container-resource'}") {
             echo "Option selected is Container bootup"
+          } else {
+            echo "seems to be an issue!"
           }
         }
        }
