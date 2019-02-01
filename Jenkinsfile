@@ -18,7 +18,13 @@ pipeline {
         expression { params.TERRAFORM_RESOURCE == 'docker_image.httpd-image-resource' }
        }
        steps {
-          echo "Option selected is Image installation"
+          echo "Option selected is Image download"
+       }
+       when {
+        expression { params.TERRAFORM_RESOURCE == 'docker_container.httpd-container-resource' }
+       }
+       steps {
+          echo "Option selected is Container bootup"
        }
      }
      stage('Terraform - Apply httpd docker resources') {
