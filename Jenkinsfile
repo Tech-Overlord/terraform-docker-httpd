@@ -19,7 +19,7 @@ pipeline {
      stage('Terraform - Destroy httpd docker resources') {
        steps {
          input 'Are you sure you want to destroy the terraform resources?'
-         milestone(1)
+         milestone(2)
          sh 'sudo terraform destroy -target docker_container.httpd-container-resource -auto-approve'
          sh 'sudo terraform destroy -target docker_image.httpd-image-resource -auto-approve'
          sh 'sudo chown -R jenkins:jenkins * && sudo chown -R jenkins:jenkins .terraform'
