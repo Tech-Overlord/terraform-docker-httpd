@@ -12,7 +12,7 @@ pipeline {
         expression { params.TERRAFORM_RESOURCE == 'docker_image.httpd-image-resource' }
        }
        steps {
-          echo "Option selected is ${params.ERRAFORM_RESOURCE}"
+          echo "Option selected is Image installation"
        }
      }
      stage('Terraform Plan') {
