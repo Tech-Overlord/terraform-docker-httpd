@@ -7,18 +7,18 @@ pipeline {
         name: 'TERRAFORM_RESOURCE')
      }
    stages {
-    stage('Print choice') {
+     stage('Terraform Plan') {
+       steps {
+          sh 'sudo terraform init'
+          sh 'sudo terraform plan'
+       }
+     }
+     stage('Choose Resource') {
        when {
         expression { params.TERRAFORM_RESOURCE == 'docker_image.httpd-image-resource' }
        }
        steps {
           echo "Option selected is Image installation"
-       }
-     }
-     stage('Terraform Plan') {
-       steps {
-          sh 'sudo terraform init'
-          sh 'sudo terraform plan'
        }
      }
      stage('Terraform - Apply httpd docker resources') {
