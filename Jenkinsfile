@@ -1,5 +1,11 @@
 pipeline {
    agent any
+   parameters {
+      choice(
+        choices: ['docker_image.httpd-image-resource' , 'docker_container.httpd-container-resource'],
+        description: 'You may choose the specific target you want to perform terraform apply or terraform destroy against.',
+        name: 'Which terraform resource/name do you wish to work with?')
+     }
    stages {
      stage('Terraform Plan') {
        steps {
@@ -7,17 +13,11 @@ pipeline {
           sh 'sudo terraform plan'
        }
      }
-     parameters {
-      choice(
-        choices: ['docker_image.httpd-image-resource' , 'docker_container.httpd-container-resource'],
-        description: 'You may choose the specific target you want to perform terraform apply or terraform destroy against.',
-        name: 'Which terraform resource/name do you wish to work with?')
-     }
      stage('Terraform - Apply httpd docker resources') {
        steps {
          input 'Does the terraform execution plan look good to be applied?'
          milestone(1)
-         sh 'sudo terraform apply -target docker_image.httpd-image-resource -auto-approve'  
+         sh 'sudo terraform apply -target docker_image.httpd-image-resource -auto-approve'
          sh 'sudo terraform apply -target docker_container.httpd-container-resource -auto-approve'
          sh 'sudo chown -R jenkins:jenkins * && sudo chown -R jenkins:jenkins .terraform'
        }
