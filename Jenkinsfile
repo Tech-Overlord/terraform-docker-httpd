@@ -11,7 +11,8 @@ pipeline {
        steps {
          input 'Does the terraform execution plan look good to be applied?'
          milestone(1)
-         sh 'sudo terraform apply -target docker_image.httpd-image-resource  -target docker_container.httpd-container-resource'
+         sh 'sudo terraform apply -target docker_image.httpd-image-resource -auto-approve'  
+         sh 'sudo terraform apply -target docker_container.httpd-container-resource -auto-approve'
          sh 'sudo chown -R jenkins:jenkins * && sudo chown -R jenkins:jenkins .terraform'
        }
      }
