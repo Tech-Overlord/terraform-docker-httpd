@@ -14,17 +14,14 @@ pipeline {
        }
      }
      stage('Choose Resource') {
-       when {
-        expression { params.TERRAFORM_RESOURCE == 'docker_image.httpd-image-resource' }
-       }
        steps {
-          echo "Option selected is Image download"
-       }
-       when {
-        expression { params.TERRAFORM_RESOURCE == 'docker_container.httpd-container-resource' }
-       }
-       steps {
-          echo "Option selected is Container bootup"
+        script {
+          if ("${params.TERRAFORM_RESOURCE == 'docker_image.httpd-image-resource'}") {
+            echo "Option selected is Image download"
+          } else if ("${params.TERRAFORM_RESOURCE == 'docker_image.httpd-image-resource'}") {
+            echo "Option selected is Container bootup"
+          }
+        }
        }
      }
      stage('Terraform - Apply httpd docker resources') {
