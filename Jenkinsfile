@@ -12,9 +12,9 @@ pipeline {
    stages {
      stage('Terraform Plan') {
       steps {
-          sh "sudo terraform init"
-          sh "sudo terraform plan -target ${params.TERRAFORM_RESOURCE}"
-          sh "sudo chown -R jenkins:jenkins * && sudo chown -R jenkins:jenkins .terraform"
+          sh "terraform init"
+          sh "terraform plan -target ${params.TERRAFORM_RESOURCE}"
+          //sh "sudo chown -R jenkins:jenkins * && sudo chown -R jenkins:jenkins .terraform"
       }
      }
      stage('Terraform Apply') {
@@ -24,8 +24,8 @@ pipeline {
       steps {
          input 'Does the terraform execution plan look good to be applied?'
          milestone(1)
-         sh "sudo terraform apply -target ${params.TERRAFORM_RESOURCE} -auto-approve"
-         sh "sudo chown -R jenkins:jenkins * && sudo chown -R jenkins:jenkins .terraform"
+         sh "terraform apply -target ${params.TERRAFORM_RESOURCE} -auto-approve"
+         //sh "sudo chown -R jenkins:jenkins * && sudo chown -R jenkins:jenkins .terraform"
       }
      }
      stage('Terraform Destroy') {
@@ -35,8 +35,8 @@ pipeline {
       steps {
          input 'Are you sure you want to destroy the terraform resources?'
          milestone(2)
-         sh "sudo terraform destroy -target ${params.TERRAFORM_RESOURCE} -auto-approve"
-         sh "sudo chown -R jenkins:jenkins * && sudo chown -R jenkins:jenkins .terraform"
+         sh "terraform destroy -target ${params.TERRAFORM_RESOURCE} -auto-approve"
+         //sh "sudo chown -R jenkins:jenkins * && sudo chown -R jenkins:jenkins .terraform"
       }
      }
    }
