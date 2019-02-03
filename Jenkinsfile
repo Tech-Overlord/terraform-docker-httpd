@@ -2,47 +2,42 @@ pipeline {
    agent any
    parameters {
       choice(
-        choices: ['docker_image.httpd-image-resource' , 'docker_container.httpd-container-resource'],
-        description: 'You may choose the specific target you want to perform terraform apply or terraform destroy against.',
-        name: 'TERRAFORM_RESOURCE')
+        choices: ['apply' , 'destroy'],
+        description: 'You may choose the specific terraform action you need to perform (for e.g. terraform plan, terraform apply or terraform destroy)',
+        name: 'TERRAFORM_ACTION')
+      string(
+        name: 'TERRAFORM_RESOURCE',
+        description: 'Provide the resource name that "TERRAFORM_ACTION" will be applied against.')
      }
    stages {
      stage('Terraform Plan') {
-       steps {
-          sh 'sudo terraform init'
-          sh 'sudo terraform plan'
-       }
+      steps {
+          sh "sudo terraform init"
+          sh "sudo terraform plan -target ${params.TERRAFORM_RESOURCE}"
+          sh "sudo chown -R jenkins:jenkins * && sudo chown -R jenkins:jenkins .terraform"
+      }
      }
-     stage('Choose Resource') {
-       steps {
-        script {
-          if ("${params.TERRAFORM_RESOURCE == 'docker_image.httpd-image-resource'}") {
-            echo "Option selected is Image download"
-          } else if ("${params.TERRAFORM_RESOURCE == 'docker_container.httpd-container-resource'}") {
-            echo "Option selected is Container bootup"
-          } else {
-            echo "seems to be an issue!"
+     stage('Terraform Apply') {
+      when {
+            expression { params.TERRAFORM_ACTION == 'apply' }
           }
-        }
-       }
-     }
-     stage('Terraform - Apply httpd docker resources') {
-       steps {
+      steps {
          input 'Does the terraform execution plan look good to be applied?'
          milestone(1)
-         sh 'sudo terraform apply -target docker_image.httpd-image-resource -auto-approve'
-         sh 'sudo terraform apply -target docker_container.httpd-container-resource -auto-approve'
-         sh 'sudo chown -R jenkins:jenkins * && sudo chown -R jenkins:jenkins .terraform'
-       }
+         sh "sudo terraform apply -target ${params.TERRAFORM_RESOURCE} -auto-approve"
+         sh "sudo chown -R jenkins:jenkins * && sudo chown -R jenkins:jenkins .terraform"
+      }
      }
-     stage('Terraform - Destroy httpd docker resources') {
-       steps {
+     stage('Terraform Destroy') {
+      when {
+            expression { params.TERRAFORM_ACTION == 'destroy' }
+          }
+      steps {
          input 'Are you sure you want to destroy the terraform resources?'
          milestone(2)
-         sh 'sudo terraform destroy -target docker_container.httpd-container-resource -auto-approve'
-         sh 'sudo terraform destroy -target docker_image.httpd-image-resource -auto-approve'
-         sh 'sudo chown -R jenkins:jenkins * && sudo chown -R jenkins:jenkins .terraform'
-       }
+         sh "sudo terraform destroy -target ${params.TERRAFORM_RESOURCE} -auto-approve"
+         sh "sudo chown -R jenkins:jenkins * && sudo chown -R jenkins:jenkins .terraform"
+      }
      }
    }
 }
