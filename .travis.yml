@@ -11,8 +11,8 @@ before_script:
   - sudo apt-get install -y unzip wget
 
 script:
-  - wget -v $APP_URL/$APP_NAME/$APP_VERSION/$APP_NAME_$APP_VERSION_$APP_ARCH.zip
-  - unzip $APP_NAME$APP_VERSION$APP_ARCH.zip -d /usr/local/bin/
+  - wget -v $APP_URL/$APP_NAME/$APP_VERSION/$APP_NAME\_$APP_VERSION\_$APP_ARCH.zip
+  - unzip $APP_NAME\_$APP_VERSION\_$APP_ARCH.zip -d /usr/local/bin/
   - chmod +x /usr/local/bin/$APP_NAME
   - $APP_NAME --version
   - $APP_NAME init
