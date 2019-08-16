@@ -4,10 +4,7 @@ sudo: required
 dist: bionic
 
 env:
-  - APP_NAME=terraform
-  - APP_VERSION=0.12.6
-  - APP_ARCH=linux_amd64
-  - APP_URL=https://releases.hashicorp.com
+  - APP_NAME=terraform APP_VERSION=0.12.6 APP_ARCH=linux_amd64 APP_URL=https://releases.hashicorp.com
 
 before_script:
   - sudo apt-get -qq update
