@@ -20,4 +20,4 @@ script:
   - $APP_NAME --version
   - $APP_NAME init
   - $APP_NAME plan
-  - $APP_NAME apply -auto-approve
+  #- $APP_NAME apply -auto-approve
